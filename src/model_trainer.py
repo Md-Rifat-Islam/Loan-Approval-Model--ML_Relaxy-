@@ -19,6 +19,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 
+
+model = LogisticRegression(max_iter=1000)  # Increase max_iter
+
+# Monkey-patch for Pandas 2.0+ to support iteritems
+if not hasattr(pd.DataFrame, "iteritems"):
+    pd.DataFrame.iteritems = pd.DataFrame.items
+
+
 class ModelTrainer:
     def __init__(self):
         self.transformed_data_dir = "artifacts/transformed_data"

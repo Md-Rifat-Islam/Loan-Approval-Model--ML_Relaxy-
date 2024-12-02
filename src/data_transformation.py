@@ -7,6 +7,10 @@ import os
 import joblib
 from typing import Tuple, List
 
+# Monkey-patch for Pandas 2.0+ to support iteritems
+if not hasattr(pd.DataFrame, "iteritems"):
+    pd.DataFrame.iteritems = pd.DataFrame.items
+
 class DataTransformation:
     def __init__(self):
         self.ingested_data_dir = "artifacts/ingested_data"

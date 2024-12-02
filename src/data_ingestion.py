@@ -3,6 +3,10 @@ import os
 from typing import Tuple
 import joblib
 
+# Monkey-patch for Pandas 2.0+ to support iteritems
+if not hasattr(pd.DataFrame, "iteritems"):
+    pd.DataFrame.iteritems = pd.DataFrame.items
+
 class DataIngestion:
     def __init__(self, data_path: str):
         self.data_path = data_path
@@ -57,7 +61,9 @@ class DataIngestion:
                     df[col] = df[col].str.strip()
             
             # Handle missing values in categorical features
-            df[categorical_features].fillna('Unknown', inplace=True)
+            # df[categorical_features].fillna('Unknown', inplace=True)
+            df[categorical_features] = df[categorical_features].fillna('Unknown')
+
             
             # Separate features and target
             X = df.drop(columns=['loan_status'])

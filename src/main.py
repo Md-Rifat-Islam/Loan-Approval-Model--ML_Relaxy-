@@ -6,6 +6,10 @@ import os
 import logging
 from datetime import datetime
 
+# Monkey-patch for Pandas 2.0+ to support iteritems
+if not hasattr(pd.DataFrame, "iteritems"):
+    pd.DataFrame.iteritems = pd.DataFrame.items
+
 def setup_logging():
     """Setup logging configuration"""
     log_filename = f"logs/pipeline_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
@@ -58,7 +62,7 @@ def main():
         create_directories()
         
         # Initialize pipeline components
-        data_ingestion = DataIngestion('dataset/loan_approval_dataset.csv')
+        data_ingestion = DataIngestion("src/dataset/loan_approval_dataset.csv")
         data_transformation = DataTransformation()
         model_trainer = ModelTrainer()
         
